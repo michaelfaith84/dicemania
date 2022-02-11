@@ -1,4 +1,4 @@
 To Do:
- - Hold Button/Cover Light Sensor + Shake to roll
+ - Hold Button/Cover Light Sensor + ~~Shake to roll~~
  - Animations
  - Stats?
