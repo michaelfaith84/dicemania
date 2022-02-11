@@ -27,7 +27,7 @@ const DieSelector = ({
   );
 
   const onDieQtyChange = (qty) => {
-    setDieQty(qty.replace(/[^\d]/g, ""));
+    setDieQty(qty.replace(/[^\d]/g, "").toString());
   };
 
   return (

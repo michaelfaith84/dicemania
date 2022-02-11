@@ -10,8 +10,8 @@ import {
 import DieSelector from "./components/DieSelector";
 import randomInteger from "random-int";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import uuid from "react-native-uuid";
 import {
-  faCoffee,
   faDiceD4,
   faDiceD6,
   faDiceD8,
@@ -19,12 +19,13 @@ import {
   faDiceD12,
   faDiceD20,
 } from "@fortawesome/pro-solid-svg-icons";
+import * as Shake from "expo-shake";
 
 const HomeScreen = () => {
   // Die Type
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   // Die Quantity
-  const [dieQty, setDieQty] = React.useState(0);
+  const [dieQty, setDieQty] = React.useState("0");
   const data = ["d4", "d6", "d8", "d10", "d12", "d20"];
   const iconMap = {
     d4: faDiceD4,
@@ -36,6 +37,8 @@ const HomeScreen = () => {
   };
   const [diePool, setDiePool] = useState([]);
   const [results, setResults] = useState([]);
+  const [speed, setSpeed] = useState(0);
+  const [shaking, setShaking] = useState(false);
   const addDie = () => {
     const dice = [];
     const resultsArr = [];
@@ -48,22 +51,29 @@ const HomeScreen = () => {
   };
   const icon = (die) => {
     return (
-      <Text>
-        <FontAwesomeIcon
-          style={{ padding: 10, flexWrap: "wrap" }}
-          size={32}
-          icon={iconMap[die]}
-        />
-      </Text>
+      // <Text key={uuid.v4()}>
+      <FontAwesomeIcon
+        style={{
+          padding: 10,
+          flexWrap: "wrap",
+          marginRight: 10,
+          marginVertical: 10,
+        }}
+        size={32}
+        icon={iconMap[die]}
+        key={uuid.v4()}
+      />
+      // </Text>
     );
   };
   const iconResult = (die) => {
     return (
-      <Text>
+      <Text key={uuid.v4()} style={{ marginVertical: 10 }}>
         <FontAwesomeIcon
           style={{ padding: 10, flexWrap: "wrap" }}
           size={32}
           icon={iconMap[die]}
+          key={uuid.v4()}
         />
         {randomInteger(1, parseInt(die.replace(/[^\d]/g, "")))}
       </Text>
@@ -76,7 +86,7 @@ const HomeScreen = () => {
         results.push(iconResult(die));
       });
       setResults(results);
-      console.log(results);
+      // console.log(results);
     }
   };
   const resetDiePool = () => {
@@ -93,6 +103,31 @@ const HomeScreen = () => {
       setResults(icons);
     }
   }, [diePool]);
+
+  useEffect(() => {
+    Shake.addListener(() => {
+      return {
+        shaking,
+        setShaking,
+        setSpeed,
+        handler: () => {
+          console.log("Shake shake shake!");
+        },
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (shaking === true && speed < 5 && diePool.length > 0) {
+      rollDice();
+      setShaking(false);
+    }
+    // if (shaking ===) {
+    //     const icons = [];
+    //     diePool.map((die) => icons.push(icon(die)));
+    //     setResults(icons);
+    // }
+  }, [speed]);
 
   return (
     <Layout
@@ -129,11 +164,13 @@ const HomeScreen = () => {
           flex: 1,
           flexDirection: "row",
           flexWrap: "wrap",
-          justifyContent: "flex-start",
+          justifyContent: "space-evenly",
+          alignContent: "center",
+          alignItems: "center",
           width: "100%",
         }}
       >
-        {results.length > 0 ? results.map((res) => res) : null}
+        {results.length > 0 ? results.map((res, index) => res) : null}
       </Layout>
       <Layout
         style={{
