@@ -20,6 +20,10 @@ import {
   faDiceD20,
 } from "@fortawesome/pro-solid-svg-icons";
 import * as Shake from "expo-shake";
+import SaveLoad from "./components/SaveLoad";
+import SaveModal from "./components/SaveModal";
+import LoadModal from "./components/LoadModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
   // Die Type
@@ -35,10 +39,57 @@ const HomeScreen = () => {
     d12: faDiceD12,
     d20: faDiceD20,
   };
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [diePool, setDiePool] = useState([]);
   const [results, setResults] = useState([]);
   const [speed, setSpeed] = useState(0);
   const [shaking, setShaking] = useState(false);
+  const [error, setError] = useState(null);
+  const [poolKeys, setPoolKeys] = useState([]);
+
+  const updateKeys = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      if (keys.length > 0) {
+        setPoolKeys(keys);
+      } else {
+        setError("Error: A die pool with that name already exists.");
+      }
+    } catch (err) {
+      // This code runs if there were any errors.
+      setError("Error: " + err);
+    }
+  };
+
+  const toggleModal = (target) => {
+    switch (target) {
+      case "save":
+        showSaveModal === true
+          ? setShowSaveModal(false)
+          : setShowSaveModal(true);
+        return;
+      case "load":
+        showLoadModal === true
+          ? setShowLoadModal(false)
+          : setShowLoadModal(true);
+        return;
+      case "delete":
+        showDeleteModal === true
+          ? setShowDeleteModal(false)
+          : setShowDeleteModal(true);
+        return;
+      default:
+        setError("Error toggling modal: " + target);
+        return;
+    }
+  };
+
+  const toggleLoadModal = () => {
+    showLoadModal === true ? setShowLoadModal(false) : setShowLoadModal(true);
+  };
+
   const addDie = () => {
     const dice = [];
     const resultsArr = [];
@@ -49,6 +100,7 @@ const HomeScreen = () => {
     // diePool.map((d) => resultsArr.push(icon(d)));
     // setResults(resultsArr);
   };
+
   const icon = (die) => {
     return (
       // <Text key={uuid.v4()}>
@@ -66,6 +118,7 @@ const HomeScreen = () => {
       // </Text>
     );
   };
+
   const iconResult = (die) => {
     return (
       <Text key={uuid.v4()} style={{ marginVertical: 10 }}>
@@ -79,6 +132,7 @@ const HomeScreen = () => {
       </Text>
     );
   };
+
   const rollDice = () => {
     let results = [];
     if (diePool.length > 0) {
@@ -86,9 +140,10 @@ const HomeScreen = () => {
         results.push(iconResult(die));
       });
       setResults(results);
-      // console.log(results);
+      // console.log("Roll Results: " + results);
     }
   };
+
   const resetDiePool = () => {
     if (diePool.length > 0) {
       setDiePool([]);
@@ -98,6 +153,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (diePool.length > 0) {
+      console.log("Die pool: " + diePool);
       const icons = [];
       diePool.map((die) => icons.push(icon(die)));
       setResults(icons);
@@ -110,9 +166,6 @@ const HomeScreen = () => {
         shaking,
         setShaking,
         setSpeed,
-        handler: () => {
-          console.log("Shake shake shake!");
-        },
       };
     });
   }, []);
@@ -129,6 +182,12 @@ const HomeScreen = () => {
     // }
   }, [speed]);
 
+  useEffect(() => {
+    if (error != null) {
+      console.log(error);
+    }
+  }, [error]);
+
   return (
     <Layout
       style={{
@@ -141,6 +200,19 @@ const HomeScreen = () => {
       }}
       level={"4"}
     >
+      <Layout
+        style={{
+          flexDirection: "row",
+          marginBottom: 25,
+        }}
+      >
+        <SaveLoad
+          props={{
+            diePool,
+            toggleModal,
+          }}
+        />
+      </Layout>
       <Layout
         style={{
           flexDirection: "row",
@@ -190,6 +262,25 @@ const HomeScreen = () => {
       >
         <Button onPress={resetDiePool}>Reset Pool!</Button>
       </Layout>
+      <SaveModal
+        props={{
+          diePool,
+          toggleModal,
+          showModal: showSaveModal,
+          setError,
+          updateKeys,
+        }}
+      />
+      <LoadModal
+        props={{
+          setDiePool,
+          toggleModal,
+          showModal: showLoadModal,
+          setError,
+          updateKeys,
+          poolKeys,
+        }}
+      />
     </Layout>
   );
 };
