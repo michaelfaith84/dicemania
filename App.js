@@ -23,6 +23,7 @@ import * as Shake from "expo-shake";
 import SaveLoad from "./components/SaveLoad";
 import SaveModal from "./components/SaveModal";
 import LoadModal from "./components/LoadModal";
+import DeleteModal from "./components/DeleteModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
@@ -84,10 +85,6 @@ const HomeScreen = () => {
         setError("Error toggling modal: " + target);
         return;
     }
-  };
-
-  const toggleLoadModal = () => {
-    showLoadModal === true ? setShowLoadModal(false) : setShowLoadModal(true);
   };
 
   const addDie = () => {
@@ -251,7 +248,9 @@ const HomeScreen = () => {
           justifyContent: "flex-end",
         }}
       >
-        <Button onPress={rollDice}>Roll!</Button>
+        <Button disabled={diePool.length > 0 ? false : true} onPress={rollDice}>
+          Roll!
+        </Button>
       </Layout>
       <Layout
         style={{
@@ -260,7 +259,12 @@ const HomeScreen = () => {
           justifyContent: "flex-end",
         }}
       >
-        <Button onPress={resetDiePool}>Reset Pool!</Button>
+        <Button
+          disabled={diePool.length > 0 ? false : true}
+          onPress={resetDiePool}
+        >
+          Reset Pool!
+        </Button>
       </Layout>
       <SaveModal
         props={{
@@ -276,6 +280,16 @@ const HomeScreen = () => {
           setDiePool,
           toggleModal,
           showModal: showLoadModal,
+          setError,
+          updateKeys,
+          poolKeys,
+        }}
+      />
+      <DeleteModal
+        props={{
+          setDiePool,
+          toggleModal,
+          showModal: showDeleteModal,
           setError,
           updateKeys,
           poolKeys,

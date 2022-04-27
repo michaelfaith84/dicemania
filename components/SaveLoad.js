@@ -34,11 +34,7 @@ const SaveLoad = ({ props: { diePool, toggleModal, deleteModal } }) => {
       >
         Save
       </Button>
-      <Button
-        disabled={diePool.length > 0 ? false : true}
-        style={styles.Btn}
-        onPress={() => toggleModal("delete")}
-      >
+      <Button disabled={loadDisabled} onPress={() => toggleModal("delete")}>
         Delete
       </Button>
     </ButtonGroup>
@@ -47,7 +43,7 @@ const SaveLoad = ({ props: { diePool, toggleModal, deleteModal } }) => {
 
 const styles = StyleSheet.create({
   BtnGrp: {
-    width: "100%",
+    // width: "100%",
     display: "flex",
     flexDirection: "row",
   },

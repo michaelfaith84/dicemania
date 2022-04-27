@@ -7,6 +7,7 @@ import {
   Input,
   Button,
 } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
 
 const DieSelector = ({
   props: { selectedIndex, setSelectedIndex, dieQty, setDieQty, data, addDie },
@@ -41,8 +42,8 @@ const DieSelector = ({
     >
       <Layout style={{ flex: 1 }}>
         <Select
-          // style={styles.select}
-          style={{ flex: 1, height: "100%" }}
+          style={styles.select}
+          // style={{ flex: 1 }}
           value={displayValue}
           selectedIndex={selectedIndex}
           onSelect={(index) => setSelectedIndex(index)}
@@ -50,7 +51,7 @@ const DieSelector = ({
           {data.map(renderOption)}
         </Select>
       </Layout>
-      <Layout style={{ flex: 1 }}>
+      <Layout style={styles.container}>
         <Input
           placeholder={"Quantity"}
           value={dieQty}
@@ -63,5 +64,10 @@ const DieSelector = ({
     </Layout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1, marginHorizontal: 2 },
+  select: { flex: 1, marginVertical: 2, marginLeft: 2 },
+});
 
 export default DieSelector;
