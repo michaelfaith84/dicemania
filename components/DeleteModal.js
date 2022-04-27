@@ -1,11 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
 import {
   Modal,
-  Text,
   Button,
   Card,
-  Input,
   SelectItem,
   Select,
   IndexPath,
@@ -13,7 +11,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DeleteModal = ({
-  props: { setDiePool, toggleModal, showModal, setError, updateKeys, poolKeys },
+  props: { toggleModal, showModal, setError, updateKeys, poolKeys },
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
 
@@ -26,20 +24,6 @@ const DeleteModal = ({
     console.log(poolKeys.length);
   }, [poolKeys]);
 
-  // const poolSelectItem = (key, value) => {
-  //   return (
-  //   );
-  // };
-
-  const fetchData = async (key) => {
-    try {
-      const res = await AsyncStorage.getItem(key);
-      return JSON.parse(res);
-    } catch (err) {
-      setError("Error: " + err);
-      return false;
-    }
-  };
   const deleteData = async (key) => {
     try {
       const res = await AsyncStorage.removeItem(key);
@@ -50,7 +34,7 @@ const DeleteModal = ({
     }
   };
 
-  const handlePress = async (e) => {
+  const handlePress = async () => {
     await deleteData(poolKeys[selectedIndex.row - 1]);
     await updateKeys();
     toggleModal("delete");

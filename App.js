@@ -89,18 +89,14 @@ const HomeScreen = () => {
 
   const addDie = () => {
     const dice = [];
-    const resultsArr = [];
     for (let i = 0; i < dieQty; i++) {
       dice.push(data[selectedIndex.row]);
     }
     diePool.length > 0 ? setDiePool([...diePool, ...dice]) : setDiePool(dice);
-    // diePool.map((d) => resultsArr.push(icon(d)));
-    // setResults(resultsArr);
   };
 
   const icon = (die) => {
     return (
-      // <Text key={uuid.v4()}>
       <FontAwesomeIcon
         style={{
           padding: 10,
@@ -112,7 +108,6 @@ const HomeScreen = () => {
         icon={iconMap[die]}
         key={uuid.v4()}
       />
-      // </Text>
     );
   };
 
@@ -172,11 +167,6 @@ const HomeScreen = () => {
       rollDice();
       setShaking(false);
     }
-    // if (shaking ===) {
-    //     const icons = [];
-    //     diePool.map((die) => icons.push(icon(die)));
-    //     setResults(icons);
-    // }
   }, [speed]);
 
   useEffect(() => {
@@ -239,7 +229,7 @@ const HomeScreen = () => {
           width: "100%",
         }}
       >
-        {results.length > 0 ? results.map((res, index) => res) : null}
+        {results.length > 0 ? results.map((res) => res) : null}
       </Layout>
       <Layout
         style={{

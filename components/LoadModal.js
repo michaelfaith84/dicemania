@@ -1,11 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
 import {
   Modal,
-  Text,
   Button,
   Card,
-  Input,
   SelectItem,
   Select,
   IndexPath,
@@ -26,11 +24,6 @@ const LoadModal = ({
     console.log(poolKeys.length);
   }, [poolKeys]);
 
-  // const poolSelectItem = (key, value) => {
-  //   return (
-  //   );
-  // };
-
   const fetchData = async (key) => {
     try {
       const res = await AsyncStorage.getItem(key);
@@ -41,7 +34,7 @@ const LoadModal = ({
     }
   };
 
-  const handlePress = async (e) => {
+  const handlePress = async () => {
     setDiePool(await fetchData(poolKeys[selectedIndex.row - 1]));
     toggleModal("load");
   };

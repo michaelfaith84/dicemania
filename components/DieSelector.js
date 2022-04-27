@@ -1,8 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React from "react";
 import {
   Select,
   SelectItem,
-  IndexPath,
   Layout,
   Input,
   Button,
@@ -12,17 +11,8 @@ import { StyleSheet } from "react-native";
 const DieSelector = ({
   props: { selectedIndex, setSelectedIndex, dieQty, setDieQty, data, addDie },
 }) => {
-  // useEffect(() => {
-  //   // console.log(data[selectedIndex.row]);
-  // }, [selectedIndex]);
-  // const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  // const addDie = () => {
-  //   const dice = [];
-  //   for (let i = 0; i <= dieQty; i++) {
-  //     dice.push(data[selectedIndex.row]);
-  //   }
-  // };
   const displayValue = data[selectedIndex.row];
+
   const renderOption = (title, index) => (
     <SelectItem style={{ alignContent: "center" }} title={title} key={index} />
   );

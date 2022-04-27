@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Modal, Text, Button, Card, Input } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Modal, Button, Card, Input } from "@ui-kitten/components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SaveModal = ({
@@ -11,13 +11,19 @@ const SaveModal = ({
     try {
       const res = await AsyncStorage.getItem("@" + poolName);
       if (res == null || res === "") {
-        const addRes = await AsyncStorage.setItem(
-          "@" + poolName,
-          JSON.stringify(diePool)
-        );
-        updateKeys();
-        toggleModal("save");
-        setPoolName("");
+        try {
+          const addRes = await AsyncStorage.setItem(
+            "@" + poolName,
+            JSON.stringify(diePool)
+          );
+          updateKeys();
+          toggleModal("save");
+          setPoolName("");
+        } catch (err) {
+          setError("Error: " + err);
+
+          setPoolName("");
+        }
       } else {
         setError("Error: A die pool with that name already exists.");
         setPoolName("");
@@ -30,7 +36,6 @@ const SaveModal = ({
   };
 
   return (
-    // <View style={styles.container}>
     <Modal
       visible={showModal}
       backdropStyle={styles.backdrop}
@@ -48,7 +53,6 @@ const SaveModal = ({
         </Button>
       </Card>
     </Modal>
-    // </View>
   );
 };
 

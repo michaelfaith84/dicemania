@@ -1,18 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import {
-  ApplicationProvider,
-  Layout,
-  Text,
-  Button,
-  ButtonGroup,
-  Select,
-  SelectItem,
-  IndexPath,
-} from "@ui-kitten/components";
+import { Button, ButtonGroup } from "@ui-kitten/components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SaveLoad = ({ props: { diePool, toggleModal, deleteModal } }) => {
+const SaveLoad = ({ props: { diePool, toggleModal } }) => {
   const [loadDisabled, setLoadDisabled] = useState(true);
 
   useEffect(async () => {
