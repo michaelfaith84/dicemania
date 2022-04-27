@@ -1,4 +1,5 @@
 To Do:
- - Hold Button/Cover Light Sensor + ~~Shake to roll~~
- - Animations
+ - ~~Shake to roll~~
+ - ~~Save/Load/Delete Pools~~
+ - Animations?
  - Stats?
